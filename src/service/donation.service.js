@@ -45,3 +45,40 @@ export const getAllDonation = async (pharmacyId, page, limit, orderBy) => {
 
   return response;
 };
+
+export const createTableData = async (data) => {
+  const response = await getApi()
+    .post(`/branch-tables`, data)
+    .then((res) => {
+      return buildResponse(true, res.data);
+    })
+    .catch((err) => {
+      return buildResponse(false, err.response.data, err.response.status);
+    });
+
+  return response;
+};
+export const getTableData = async () => {
+  const response = await getApi()
+    .get(`/branch-tables/0/100000`)
+    .then((res) => {
+      return buildResponse(true, res.data);
+    })
+    .catch((err) => {
+      return buildResponse(false, err.response.data, err.response.status);
+    });
+
+  return response;
+};
+export const getData = async () => {
+  const response = await getApi()
+    .get(`/restaurant-menu/0/10000/1`)
+    .then((res) => {
+      return buildResponse(true, res.data);
+    })
+    .catch((err) => {
+      return buildResponse(false, err.response.data, err.response.status);
+    });
+
+  return response;
+};
