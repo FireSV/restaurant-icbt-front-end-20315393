@@ -21,7 +21,12 @@ import {
   getGolbalDonationByid,
   getGlobalDonner,
 } from "../../service/donor.service";
-import { createDonation, getAllDonation } from "../../service/donation.service";
+import {
+  createDonation,
+  createTableData,
+  getAllDonation,
+  getTableData,
+} from "../../service/donation.service";
 import { popAlert, popDangerPrompt } from "../../utils/alerts";
 import donation from "../../models/donation";
 import Popup from "../../components/common/Popup";
@@ -31,25 +36,27 @@ import {
   getChildrenHomeById,
   updateChildrenhome,
   deleteChildrenhome,
+  getallChildrenhome,
 } from "../../service/childrenhome.service";
 import Header from "../../components/common/Header";
 import Footer from "../../pages/Footer/Footer";
+import { getAllSubMenu } from "../../service/submenu.service";
 
 const tableColumns = [
   {
-    id: "name",
-    label: "Name",
+    id: "id",
+    label: "ID",
     minWidth: 140,
     align: "left",
   },
   {
-    id: "nic",
-    label: "NIC",
+    id: "branch",
+    label: "Branch",
     align: "right",
   },
   {
-    id: "contactNumber",
-    label: "Contact Number",
+    id: "tablesCount",
+    label: "Tables Count",
     align: "right",
   },
   // {
@@ -57,21 +64,21 @@ const tableColumns = [
   //   label: "Donation Type",
   //   align: "right",
   // },
-  {
-    id: "address",
-    label: "Address",
-    align: "right",
-  },
-  {
-    id: "email",
-    label: "Email",
-    align: "right",
-  },
-  {
-    id: "action",
-    label: "Action",
-    align: "right",
-  },
+  // {
+  //   id: "address",
+  //   label: "Address",
+  //   align: "right",
+  // },
+  // {
+  //   id: "email",
+  //   label: "Email",
+  //   align: "right",
+  // },
+  // {
+  //   id: "action",
+  //   label: "Action",
+  //   align: "right",
+  // },
 ];
 
 const BranchTable = () => {
@@ -109,19 +116,21 @@ const BranchTable = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
-    const response = await createDonation(id, inputs);
+    const body = {
+      tablesCount: inputs.tableCount,
+      branchId: inputs.id,
+    };
+    const response = await createTableData(body);
+    console.log("Fireeeeeeeee", response);
 
     if (response.success) {
       setRefresh(!refresh);
-      response?.data?.message &&
-        popAlert("Success!", response?.data?.message, "success").then((res) => {
-          setShowPopup(false);
-          seteditShowPopup(false);
-        });
+      popAlert("Success!", response?.data?.message, "success").then((res) => {
+        setShowPopup(false);
+        seteditShowPopup(false);
+      });
     } else {
-      response?.data?.message &&
-        popAlert("Error!", response?.data?.message, "error");
+      popAlert("Error!", response?.data?.message, "error");
       response?.data?.data && setErrors(response.data.data);
     }
     setIsLoading(false);
@@ -246,12 +255,11 @@ const BranchTable = () => {
   };
 
   const handleMapInput = (input) => {};
+  console.log("globalMedicines", globalMedicines);
 
   const memoizedLabel = useMemo(
-    () =>
-      globalMedicines.find((medi) => medi.id === inputs.globalMedicine.id)
-        ?.label || "",
-    [inputs.globalMedicine.id]
+    () => globalMedicines.find((medi) => medi.id === inputs.id)?.label || "",
+    [inputs.id]
   );
 
   const throttle = (func, time) => {
@@ -259,14 +267,14 @@ const BranchTable = () => {
     timeoutRef.current = setTimeout(func, time);
   };
 
-  //select childrenhome
+  //  menu
   useEffect(() => {
     let unmounted = false;
 
     if (!unmounted && open) setIsSelectDataLoading(true);
 
     const fetchAndSet = async () => {
-      const response = await getGlobalDonner(1, 20, "desc", keyword);
+      const response = await getallChildrenhome();
 
       if (response.success) {
         if (!response.data) return;
@@ -274,7 +282,10 @@ const BranchTable = () => {
         let gMedicineArr = [];
 
         for (const gMedicine of response.data.content) {
-          gMedicineArr.push({ label: gMedicine.name, id: gMedicine.id });
+          gMedicineArr.push({
+            label: gMedicine.branchName === null ? "" : gMedicine.branchName,
+            id: gMedicine.id,
+          });
         }
 
         if (!unmounted) {
@@ -311,36 +322,17 @@ const BranchTable = () => {
     if (!unmounted) setIsLoading(true);
 
     const fetchAndSet = async () => {
-      const response = await getAllDonation(
-        id,
-        pagination.page,
-        pagination.limit,
-        pagination.orderBy,
-        keyword
-      );
+      const response = await getTableData();
 
       if (response.success) {
         if (!response.data) return;
         console.log("responsssse", response);
         let tableDataArr = [];
-        for (const donation of response.data.content) {
-          console.log("medicine", donation);
+        for (const item of response.data.content) {
           tableDataArr.push({
-            id: donation.global.id,
-            name: donation.global.doc.name,
-            nic: donation.global.doc.nic,
-            contactNumber: donation.global.doc.contactNumber,
-            type: donation.global.doc.type,
-            address: donation.global.doc.address,
-            email: donation.global.doc.email,
-            action: (
-              <TableAction
-                id={donation.global.id}
-                onView={handleEdit}
-                // onView={() => handleEdit(medicine.global._id)}
-                // onDelete={handleDelete}
-              />
-            ),
+            id: item.id,
+            tablesCount: item.tablesCount,
+            branch: item.branch.branchName,
           });
         }
 
@@ -481,12 +473,14 @@ const BranchTable = () => {
                     if (value?.id) {
                       setInputs({
                         ...inputs,
-                        globalMedicine: { id: value.id },
+                        id: value.id,
+                        type: value.label,
                       });
                     } else {
                       setInputs({
                         ...inputs,
-                        globalMedicine: { id: "" },
+                        id: "",
+                        type: "",
                       });
                     }
                   }}
@@ -498,7 +492,7 @@ const BranchTable = () => {
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Select AAAAAA"
+                      label="Branch"
                       InputProps={{
                         ...params.InputProps,
                         endAdornment: (
@@ -520,14 +514,15 @@ const BranchTable = () => {
                 <TextField
                   name="status"
                   variant="filled"
-                  label="Test"
-                  helperText="Please Enter Test."
+                  label="Table Count"
+                  helperText="Please Enter Table Count ."
                   fullWidth
-                  value={inputs.status}
+                  value={inputs.tableCount}
+                  type="number"
                   onChange={(e) =>
                     setInputs({
                       ...inputs,
-                      status: e.target.value,
+                      tableCount: e.target.value,
                     })
                   }
                 />
