@@ -223,6 +223,18 @@ const Header = () => {
     navigate("/recepies");
   };
 
+  const NavitationMenu = () => {
+    navigate("/menutype");
+  };
+
+  const NavitationMenuSubItem = () => {
+    navigate("/menusub");
+  };
+
+  const NavitationBranch = () => {
+    navigate("/branchtable");
+  };
+
   return (
     <React.Fragment>
       <Box
@@ -276,13 +288,26 @@ const Header = () => {
                       sx={{ ...navbarStyles.signInUpBtn, textAlign: "right" }}
                       onClick={NavitationRecepies}
                     >
-                      RECEPIES
+                      MENU ITEMS
                     </Typography>
                     <Typography
                       sx={{ ...navbarStyles.signInUpBtn, textAlign: "right" }}
-                      onClick={NavitationNEW}
+                      onClick={NavitationMenuSubItem}
                     >
-                      Header 01
+                      MENU SUB ITEMS
+                    </Typography>
+            
+                    <Typography
+                      sx={{ ...navbarStyles.signInUpBtn, textAlign: "right" }}
+                      onClick={NavitationMenu}
+                    >
+                      MENU TYPE
+                    </Typography>
+                    <Typography
+                      sx={{ ...navbarStyles.signInUpBtn, textAlign: "right" }}
+                      onClick={NavitationBranch}
+                    >
+                      BRANCH TABLE
                     </Typography>
                   </>
                   {/* )} */}

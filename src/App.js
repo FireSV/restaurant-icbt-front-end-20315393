@@ -10,7 +10,7 @@ import NavBar from "./components/common/NavBar";
 import Dashboard from "./views/Dashboard";
 import Branch from "./views/Branch/Branch";
 import Orders from "./views/Orders";
-import RatePage from "./views/RatePage";
+import RatePage from "./views/RatePage/RatePage";
 import SignIn from "./views/SignIn";
 import SignUp from "./views/SignUp";
 import { useSelector } from "react-redux";
@@ -22,6 +22,9 @@ import Calendar from "./views/Calendar";
 import UserProfile from "./pages/Profile/UserProfile";
 import PayButton from "./views/PayButton";
 import ImageListView from "./views/ImageListView/ImageListView";
+import MenuType from "./views/MenuType/MenuType";
+import MenuSub from "./views/MenuSub/MenuSub";
+import BranchTable from "./views/BranchTable/BranchTable";
 
 // import MapGoogal from "./views/MapGoogal";
 
@@ -37,6 +40,9 @@ const App = () => {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/menutype" element={<MenuType />} />
+                <Route path="/menusub" element={<MenuSub />} />
+                <Route path="/branchtable" element={<BranchTable />} />
                 <Route path="/gallery" element={<ImageListView />} />
                 <Route path="/branch" element={<Branch />} />
                 <Route path="/profile" element={<UserProfile />} />
