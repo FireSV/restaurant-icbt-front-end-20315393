@@ -18,19 +18,19 @@ import { getApi } from "../utils/axios";
 import { buildResponse } from "../utils/responseBuilder";
 
 export const registerUser = async (data) => {
-  const validRoles = [
-    "customer",
-    "donner",
-    "children home",
-    "admin",
-  ];
+  // const validRoles = [
+  //   "customer",
+  //   "donner",
+  //   "children home",
+  //   "admin",
+  // ];
 
-  if (!validRoles.includes(data.role)) {
-    return buildResponse(false, { message: "Invalid role selected!" });
-  }
+  // if (!validRoles.includes(data.role)) {
+  //   return buildResponse(false, { message: "Invalid role selected!" });
+  // }
 
   const response = await getApi()
-    .post("/users", data)
+    .post("/register", data)
     .then((res) => {
       return buildResponse(true, res.data);
     })
@@ -40,4 +40,3 @@ export const registerUser = async (data) => {
 
   return response;
 };
-

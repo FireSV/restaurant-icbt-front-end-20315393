@@ -1,12 +1,7 @@
 const medicine = {
-    
-        "globalMedicine": {
-            "_id": ""
-    },
-    "status":""
-        // "unitPrice": "",
-        // "stockLevel": ""
-    
+  id: "",
+  type: "",
+  tableCount: "",
 };
 
 export default medicine;

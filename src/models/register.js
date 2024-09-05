@@ -1,7 +1,7 @@
 const register = {
   firstName: "",
   lastName: "",
-  NIC: "",
+  contactNo: "",
   address: "",
   mobile: "",
   email: "",
