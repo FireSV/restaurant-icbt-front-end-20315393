@@ -36,9 +36,8 @@ const Home = () => {
         </nav>
 
         <div className="text-box">
-          <h1>Healthy Food</h1>
+          <h1>Welcome to Fire Restaurant</h1>
           <h3>
-            Healthy Food - Nourish Your Body, Fuel Your Life
             <br />
           </h3>
         </div>

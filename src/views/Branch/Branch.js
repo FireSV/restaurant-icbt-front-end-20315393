@@ -27,6 +27,12 @@ import Footer from "../../pages/Footer/Footer";
 //table columns
 const tableColumns = [
   {
+    id: "id",
+    label: "ID",
+    minWidth: 140,
+    align: "left",
+  },
+  {
     id: "name",
     label: "Name",
     minWidth: 140,
@@ -121,6 +127,7 @@ const Branch = () => {
         let tableDataArr = [];
         for (const branch of response.data.content) {
           tableDataArr.push({
+            id: branch.id,
             name: branch.branchName,
             address: branch.address,
             contactNumber: branch.contactNumber,

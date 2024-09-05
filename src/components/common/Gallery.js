@@ -8,7 +8,7 @@ import ImageListItemBar from "@mui/material/ImageListItemBar";
 import IconButton from "@mui/material/IconButton";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import { getallChildrenhome } from "../../service/childrenhome.service";
-import { getData } from "../../service/donation.service";
+import { getData, searchData } from "../../service/donation.service";
 import donation from "../../models/donation";
 import Popup from "./Popup";
 import {
@@ -17,6 +17,7 @@ import {
   Button,
   CircularProgress,
   colors,
+  Grid,
   TextField,
   Typography,
 } from "@mui/material";
@@ -24,6 +25,7 @@ import { popAlert } from "../../utils/alerts";
 import { getApi } from "../../utils/axios";
 import { buildResponse } from "../../utils/responseBuilder";
 import { useSelector } from "react-redux";
+import SearchBar from "./SearchBar";
 
 function srcset(image, width, height, rows = 1, cols = 1) {
   return {
@@ -51,6 +53,7 @@ export default function Gallery() {
   // select medicine
   const [globalMedicines, setGlobalMedicines] = useState([]);
   const [open, setOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
   const timeoutRef = useRef(null);
   const authState = useSelector((state) => state.auth);
   console.log("authState", authState);
@@ -65,6 +68,9 @@ export default function Gallery() {
 
   const navigate = useNavigate();
 
+  const handleSearch = (item) => {
+    setSearchValue(item);
+  };
   const handleImageClick = (item) => {
     setSelectedItem(item);
     // navigate(`/rate/${id}`);
@@ -83,7 +89,8 @@ export default function Gallery() {
 
   useEffect(() => {
     const fetchAndSet = async () => {
-      const response = await getData();
+      // const response = await getData();
+      const response = await searchData({ search: searchValue });
       console.log("responseresponse", response);
       let gMedicineArr = [];
 
@@ -126,9 +133,10 @@ export default function Gallery() {
       } else {
         console.error(response?.data);
       }
+      setArray(gMedicineArr);
     };
     fetchAndSet();
-  }, []);
+  }, [searchValue]);
   console.log("selectedItemselectedItem", selectedItem);
 
   const handleSubmit = async (e) => {
@@ -214,6 +222,21 @@ export default function Gallery() {
       rowHeight={100}
       gap={1}
     >
+      <Grid container spacing={0}>
+        <Grid item xs={110}>
+          <SearchBar
+            // onChange={(event) => {
+            //   console.log("Searchhh", event.target.value);
+            // }}
+            //
+            onSearch={(e) => {
+              handleSearch(e);
+            }}
+            placeholderText="Search ... "
+          />
+        </Grid>
+      </Grid>
+
       {array.map((item) => {
         const cols = 0;
         const rows = 5;
