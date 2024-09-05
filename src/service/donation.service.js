@@ -1,4 +1,4 @@
-import { getApi } from "../utils/axios";
+import { getApi, getApiForFormData } from "../utils/axios";
 import { buildResponse } from "../utils/responseBuilder";
 
 export const createDonation = async (id, data) => {
@@ -84,7 +84,7 @@ export const getReservation = async () => {
 };
 export const completeReservation = async (id) => {
   const response = await getApi()
-    .get(`/reservation/`+id)
+    .get(`/reservation/` + id)
     .then((res) => {
       return buildResponse(true, res.data);
     })
@@ -95,11 +95,22 @@ export const completeReservation = async (id) => {
   return response;
 };
 
-
-
 export const getData = async () => {
   const response = await getApi()
     .get(`/restaurant-menu/0/10000/0`)
+    .then((res) => {
+      return buildResponse(true, res.data);
+    })
+    .catch((err) => {
+      return buildResponse(false, err.response.data, err.response.status);
+    });
+
+  return response;
+};
+
+export const searchData = async (body) => {
+  const response = await getApiForFormData()
+    .post(`/restaurant-menu/search/0/10000/0`, body)
     .then((res) => {
       return buildResponse(true, res.data);
     })

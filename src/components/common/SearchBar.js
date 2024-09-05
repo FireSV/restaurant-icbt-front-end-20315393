@@ -28,7 +28,15 @@ const SearchBar = ({ placeholderText, onSearch }) => {
           height="76px"
           placeholder={placeholderText || "Search..."}
           type="text"
-          onChange={(e) => setInput(e.target.value)}
+          onChange={
+            (e) => {
+              setInput(e.target.value);
+            }
+            // setInput(e.target.value),
+          }
+          onInput={(e) => {
+            onSearch(e.target.value);
+          }}
         />
         <Button
           variant="contained"
