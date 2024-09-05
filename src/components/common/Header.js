@@ -385,7 +385,7 @@ const Header = () => {
                     className="header__menu"
                   >
                     <div className="navbar-nav ms-auto">
-                      <MenuItem onClick={() => setRegiserPopup(true)}>
+                      {/* <MenuItem onClick={() => setRegiserPopup(true)}>
                         REGISTER
                       </MenuItem>
                       <MenuItem onClick={() => setShowPopup(true)}>
@@ -398,7 +398,30 @@ const Header = () => {
                       <MenuItem onClick={() => profile()}>
                         <AccountCircleIcon />
                         PROFILE
-                      </MenuItem>
+                      </MenuItem> */}
+
+                      {authState?.isLoggedIn === false && (
+                        <MenuItem onClick={() => setRegiserPopup(true)}>
+                          REGISTER
+                        </MenuItem>
+                      )}
+                      {authState?.isLoggedIn === false && (
+                        <MenuItem onClick={() => setShowPopup(true)}>
+                          SIGN IN
+                        </MenuItem>
+                      )}
+                      {authState?.isLoggedIn && (
+                        <MenuItem onClick={() => logout()}>
+                          <ExitToAppIcon />
+                          SIGN OUT
+                        </MenuItem>
+                      )}
+                      {authState?.isLoggedIn && (
+                        <MenuItem onClick={() => profile()}>
+                          <AccountCircleIcon />
+                          PROFILE
+                        </MenuItem>
+                      )}
                     </div>
                   </Menu>
                 </>
