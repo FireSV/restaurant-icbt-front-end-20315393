@@ -16,7 +16,10 @@ import {
   createChildrenHome,
   getallChildrenhome,
 } from "../../service/childrenhome.service";
-import { getRestaurantMenu, restaurantMenu } from "../../service/restaurantMenu.service";
+import {
+  getRestaurantMenu,
+  restaurantMenu,
+} from "../../service/restaurantMenu.service";
 
 import ChildrenHomeModel from "../../models/Childrenhome";
 import { popAlert } from "../../utils/alerts";
@@ -33,7 +36,7 @@ const tableColumns = [
     id: "name",
     label: "Name",
     align: "center",
-  }
+  },
 ];
 
 const Recepies = () => {
@@ -62,12 +65,12 @@ const Recepies = () => {
     if (response.success) {
       setRefresh(!refresh);
       // response?.data?.message &&
-        popAlert("Success!", response?.data?.message, "success").then((res) => {
-          setShowPopup(false);
-        });
+      popAlert("Success!", response?.data?.message, "success").then((res) => {
+        setShowPopup(false);
+      });
     } else {
       // response?.data?.message &&
-        popAlert("Error!", response?.data?.message, "error");
+      popAlert("Error!", response?.data?.message, "error");
       response?.data?.data && setErrors(response.data.data);
     }
     setLoading(false);
@@ -162,10 +165,10 @@ const Recepies = () => {
 
           <Grid container spacing={2}>
             <Grid item xs={10}>
-              <SearchBar
+              {/* <SearchBar
                 onSearch={handleSearch}
                 placeholderText="Search Recepies..."
-              />
+              /> */}
             </Grid>
             <Grid item xs={1}>
               <AddButton onClick={() => setShowPopup(true)} />

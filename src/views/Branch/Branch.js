@@ -36,8 +36,7 @@ const tableColumns = [
     id: "address",
     label: "Address",
     align: "left",
-  }
-  
+  },
 ];
 
 const Branch = () => {
@@ -66,12 +65,12 @@ const Branch = () => {
     if (response.success) {
       setRefresh(!refresh);
       // response?.data?.message &&
-        popAlert("Success!", response?.data?.message, "success").then((res) => {
-          setShowPopup(false);
-        });
+      popAlert("Success!", response?.data?.message, "success").then((res) => {
+        setShowPopup(false);
+      });
     } else {
       // response?.data?.message &&
-        popAlert("Error!", response?.data?.message, "error");
+      popAlert("Error!", response?.data?.message, "error");
       response?.data?.data && setErrors(response.data.data);
     }
     setLoading(false);
@@ -165,10 +164,10 @@ const Branch = () => {
 
           <Grid container spacing={2}>
             <Grid item xs={10}>
-              <SearchBar
+              {/* <SearchBar
                 onSearch={handleSearch}
                 placeholderText="Search Branch..."
-              />
+              /> */}
             </Grid>
             <Grid item xs={1}>
               <AddButton onClick={() => setShowPopup(true)} />

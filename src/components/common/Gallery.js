@@ -21,6 +21,9 @@ import {
   Typography,
 } from "@mui/material";
 import { popAlert } from "../../utils/alerts";
+import { getApi } from "../../utils/axios";
+import { buildResponse } from "../../utils/responseBuilder";
+import { useSelector } from "react-redux";
 
 function srcset(image, width, height, rows = 1, cols = 1) {
   return {
@@ -48,11 +51,15 @@ export default function Gallery() {
   // select medicine
   const [globalMedicines, setGlobalMedicines] = useState([]);
   const [open, setOpen] = useState(false);
+  const timeoutRef = useRef(null);
+  const authState = useSelector((state) => state.auth);
+  console.log("authState", authState);
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 10,
     orderBy: "desc",
   });
+  const [keyword, setKeyword] = useState("");
 
   const [selectedItem, setSelectedItem] = useState(false);
 
@@ -122,13 +129,79 @@ export default function Gallery() {
     };
     fetchAndSet();
   }, []);
+  console.log("selectedItemselectedItem", selectedItem);
+
   const handleSubmit = async (e) => {
-    console.log("selectedItem", selectedItem);
-    popAlert("Success!", "success").then((res) => {
-      setShowPopup(false);
-      seteditShowPopup(false);
-    });
+    // console.log("selectedItem", selectedItem);
+    // popAlert("Success!", "success").then((res) => {
+    //   setShowPopup(false);
+    //   seteditShowPopup(false);
+    // });
+    const body = {
+      branch: inputs.id,
+      menuId: selectedItem.menuType.id,
+      restaurantMenuItem: selectedItem.menu.id,
+      userId: authState.user.id,
+      complete_status: 1,
+    };
+    const response = await getApi()
+      .post(`reservation`, body)
+      .then((res) => {
+        popAlert("Success!", "success").then((res) => {
+          setShowPopup(false);
+        });
+        return buildResponse(true, res.data);
+      })
+      .catch((err) => {
+        popAlert("Fully Booked !", "error").then((res) => {
+          setShowPopup(false);
+        });
+        return buildResponse(false, err.response.data, err.response.status);
+      });
   };
+
+  const throttle = (func, time) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(func, time);
+  };
+
+  //  menu
+  useEffect(() => {
+    let unmounted = false;
+
+    if (!unmounted && open) setIsSelectDataLoading(true);
+
+    const fetchAndSet = async () => {
+      const response = await getallChildrenhome();
+
+      if (response.success) {
+        if (!response.data) return;
+
+        let gMedicineArr = [];
+
+        for (const gMedicine of response.data.content) {
+          gMedicineArr.push({
+            label: gMedicine.branchName === null ? "" : gMedicine.branchName,
+            id: gMedicine.id,
+          });
+        }
+
+        if (!unmounted) {
+          setGlobalMedicines(gMedicineArr);
+        }
+      } else {
+        console.error(response?.data);
+      }
+      if (!unmounted) setIsSelectDataLoading(false);
+    };
+
+    if (open) throttle(() => fetchAndSet(), 500);
+
+    return () => {
+      unmounted = true;
+    };
+  }, [keyword, open]);
+
   return (
     <ImageList
       sx={{
@@ -138,12 +211,14 @@ export default function Gallery() {
         padding: "16px",
         boxSizing: "border-box",
       }}
-      rowHeight={200}
+      rowHeight={100}
       gap={1}
     >
       {array.map((item) => {
-        const cols = item.featured ? 2 : 1;
-        const rows = item.featured ? 2 : 1;
+        const cols = 0;
+        const rows = 5;
+        // const cols = item.featured ? 2 : 1;
+        // const rows = item.featured ? 2 : 1;
 
         return (
           <ImageListItem
@@ -171,7 +246,7 @@ export default function Gallery() {
               }}
               onClick={() => handleImageClick(item)}
             />
-            <ImageListItemBar
+            {/* <ImageListItemBar
               sx={{
                 background:
                   "linear-gradient(to bottom, rgba(0,0,0,0.0) 0%, " +
@@ -188,6 +263,31 @@ export default function Gallery() {
                 </IconButton>
               }
               actionPosition="left"
+            /> */}
+
+            <ImageListItemBar
+              sx={{
+                "& .MuiImageListItemBar-title": {
+                  backgroundColor: "rgba(0, 0, 0, 0.8)",
+                  padding: "10px 10px",
+                  borderRadius: "4px",
+                  fontWeight: "bold",
+                },
+                background:
+                  "linear-gradient(to bottom, rgba(0,0,0,0.0) 0%, " +
+                  "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
+              }}
+              title={item.title}
+              position="top"
+              // actionIcon={
+              //   <IconButton
+              //     sx={{ color: "white" }}
+              //     aria-label={`star ${item.title}`}
+              //   >
+              //     <StarBorderIcon />
+              //   </IconButton>
+              // }
+              actionPosition="left"
             />
           </ImageListItem>
         );
@@ -203,7 +303,7 @@ export default function Gallery() {
           <form onSubmit={handleSubmit}>
             {/* Wrap fields in a flex container */}
             <Box sx={{ mb: 2, display: "flex", gap: 2 }}>
-              {/* <Autocomplete
+              <Autocomplete
                 id="combo-box-demo"
                 fullWidth
                 onOpen={() => {
@@ -240,23 +340,23 @@ export default function Gallery() {
                   <TextField
                     {...params}
                     label="Branch"
-                    InputProps={{
-                      ...params.InputProps,
-                      endAdornment: (
-                        <React.Fragment>
-                          {isSelectDataLoading ? (
-                            <CircularProgress color="inherit" size={20} />
-                          ) : null}
-                          {params.InputProps.endAdornment}
-                        </React.Fragment>
-                      ),
-                    }}
+                    // InputProps={{
+                    //   ...params.InputProps,
+                    //   endAdornment: (
+                    //     <React.Fragment>
+                    //       {isSelectDataLoading ? (
+                    //         <CircularProgress color="inherit" size={20} />
+                    //       ) : null}
+                    //       {params.InputProps.endAdornment}
+                    //     </React.Fragment>
+                    //   ),
+                    // }}
                   />
                 )}
               />
               {errors["name"] && (
                 <Typography color="error">{errors["name"]}</Typography>
-              )} */}
+              )}
               {/* 
               <TextField
                 name="status"

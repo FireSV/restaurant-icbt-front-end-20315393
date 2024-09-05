@@ -29,7 +29,7 @@ export const getDonationByid = async (gMedicineId, pharmacyId) => {
 
 export const getAllSubMenu = async (pharmacyId, page, limit, orderBy) => {
   const response = await getApi()
-    .get(`/menu-type/0/1000/1`, {
+    .get(`/menu-type/0/1000/0`, {
       params: {
         page,
         limit,
@@ -47,7 +47,7 @@ export const getAllSubMenu = async (pharmacyId, page, limit, orderBy) => {
 };
 export const getAllTableData = async (pharmacyId, page, limit, orderBy) => {
   const response = await getApi()
-    .get(`/restaurant-menu/0/1000/1`, {
+    .get(`/restaurant-menu/0/1000/0`, {
       params: {
         page,
         limit,

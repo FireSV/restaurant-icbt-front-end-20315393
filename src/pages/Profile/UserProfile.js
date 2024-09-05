@@ -57,9 +57,9 @@ export default function UserProfile() {
                 <Typography variant="body2" color="text.secondary">
                   Username: {authState.user.username}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                {/* <Typography variant="body2" color="text.secondary">
                   Email: {authState.user.email}
-                </Typography>
+                </Typography> */}
                 <Typography variant="body2" color="text.secondary">
                   Address: {authState.user.address}
                 </Typography>
@@ -70,9 +70,9 @@ export default function UserProfile() {
                       : "-"}
                   </Typography> */}
 
-                <Typography variant="body2" color="text.secondary">
+                {/* <Typography variant="body2" color="text.secondary">
                   Nic: {authState.user.NIC == null ? "-" : authState.user.NIC}
-                </Typography>
+                </Typography> */}
               </Box>
             </CardContent>
           </CardActionArea>

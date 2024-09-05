@@ -70,9 +70,36 @@ export const getTableData = async () => {
 
   return response;
 };
+export const getReservation = async () => {
+  const response = await getApi()
+    .get(`/reservation/0/100000/0`)
+    .then((res) => {
+      return buildResponse(true, res.data);
+    })
+    .catch((err) => {
+      return buildResponse(false, err.response.data, err.response.status);
+    });
+
+  return response;
+};
+export const completeReservation = async (id) => {
+  const response = await getApi()
+    .get(`/reservation/`+id)
+    .then((res) => {
+      return buildResponse(true, res.data);
+    })
+    .catch((err) => {
+      return buildResponse(false, err.response.data, err.response.status);
+    });
+
+  return response;
+};
+
+
+
 export const getData = async () => {
   const response = await getApi()
-    .get(`/restaurant-menu/0/10000/1`)
+    .get(`/restaurant-menu/0/10000/0`)
     .then((res) => {
       return buildResponse(true, res.data);
     })
