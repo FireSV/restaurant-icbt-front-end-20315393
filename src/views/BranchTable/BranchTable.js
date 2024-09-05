@@ -400,10 +400,10 @@ const BranchTable = () => {
         >
           <Grid container spacing={2}>
             <Grid item xs={11}>
-              <SearchBar
+              {/* <SearchBar
                 onSearch={handleSearch}
                 placeholderText="Search Branch Table..."
-              />
+              /> */}
             </Grid>
 
             <Grid item xs={1}>

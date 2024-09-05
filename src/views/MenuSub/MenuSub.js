@@ -108,7 +108,7 @@ const MenuType = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    const response = await createSubMenu( inputs);
+    const response = await createSubMenu(inputs);
 
     if (response.success) {
       setRefresh(!refresh);
@@ -133,20 +133,16 @@ const MenuType = () => {
     const response = await updateChildrenhome(id, input);
     if (response.success) {
       setRefresh(!refresh);
-     
-        popAlert("Success!", response?.data?.message, "success").then((res) => {
-          seteditShowPopup(false);
-        });
+
+      popAlert("Success!", response?.data?.message, "success").then((res) => {
+        seteditShowPopup(false);
+      });
     } else {
-   
-        popAlert("Error!", response?.data?.message, "error");
+      popAlert("Error!", response?.data?.message, "error");
       response?.data?.data && setErrors(response.data.data);
     }
     setIsLoading(false);
   };
-
-
-
 
   //Global find by id
   useEffect(() => {
@@ -154,8 +150,7 @@ const MenuType = () => {
     const fetchAndSet = async () => {
       const response = await getAllSubMenu();
 
-      
-      if (response.success===true) {
+      if (response.success === true) {
         if (!unmounted) {
           setTableRows(response?.data.content);
         }
@@ -168,7 +163,6 @@ const MenuType = () => {
       unmounted = true;
     };
   }, [id, refresh]);
-
 
   const handleUpdateClear = () => {
     setInput(updateChildrenhome);
@@ -186,7 +180,6 @@ const MenuType = () => {
     setPagination({ ...pagination, limit: limit });
   };
 
-
   const handleDelete = (id) => {
     console.log(id);
   };
@@ -195,23 +188,20 @@ const MenuType = () => {
     setKeyword(input);
   };
 
-
-
-
-
-
-
   return (
     <div className="main-container">
       <Header />
       <div className="content">
-        <div style={{ display: "flex" }}>
-          <Typography
-            variant="h5"
-            fontWeight="bold"
-            sx={{ mb: 2, mt: 4, ml: 5 }}
-          >
-            Menu Sub
+        <Box
+          sx={{
+            width: "100%",
+            mt: "3%",
+            padding: "10px",
+          }}
+        ></Box>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Typography variant="h4" fontWeight="bold" sx={{ mb: 2 }}>
+            Sub Menu
           </Typography>
         </div>
         <Box
@@ -226,10 +216,10 @@ const MenuType = () => {
         >
           <Grid container spacing={2}>
             <Grid item xs={11}>
-              <SearchBar
+              {/* <SearchBar
                 onSearch={handleSearch}
                 placeholderText="Search Menu Type..."
-              />
+              /> */}
             </Grid>
 
             <Grid item xs={1}>

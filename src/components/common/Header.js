@@ -155,7 +155,7 @@ const Header = () => {
     e.preventDefault();
     setISLoading(true);
 
-    let role = "customer"; // Default role is "customer"
+    let role = "User"; // Default role is "customer"
 
     // if (RegInputs.role === "donner" || RegInputs.role === "children home") {
     //   role = RegInputs.role;
@@ -164,19 +164,19 @@ const Header = () => {
     const response = await registerUser({
       ...RegInputs,
       role: role,
+      username: RegInputs.email,
     });
 
     if (response.success) {
-      response?.data?.message &&
-        popAlert("Success!", response?.data?.message, "success").then((res) => {
-          setRegiserPopup(false);
-          setRegInputs(register);
-          setAnchorEl(null);
-        });
+      popAlert("Success!", "success").then((res) => {
+        setRegiserPopup(false);
+        setRegInputs(register);
+        setAnchorEl(null);
+      });
     } else {
-      response?.data?.message &&
-        popAlert("Error!", response?.data?.message, "error");
-      response?.data?.data && setErrors(response.data.data);
+      popAlert("Error!", "error").then((res) => {
+        // setErrors(response.data.data);
+      });
     }
     setISLoading(false);
   };
@@ -226,6 +226,9 @@ const Header = () => {
   const NavitationMenu = () => {
     navigate("/menutype");
   };
+  const NavitationReservation = () => {
+    navigate("/reservation");
+  };
 
   const NavitationMenuSubItem = () => {
     navigate("/menusub");
@@ -267,12 +270,15 @@ const Header = () => {
                   >
                     HOME
                   </Typography>
-                  <Typography
-                    sx={{ ...navbarStyles.signInUpBtn, textAlign: "right" }}
-                    onClick={NavitationNEW}
-                  >
-                    BRANCH
-                  </Typography>
+                  {authState?.isLoggedIn &&
+                    authState?.user?.roles[0]?.name === "Admin" && (
+                      <Typography
+                        sx={{ ...navbarStyles.signInUpBtn, textAlign: "right" }}
+                        onClick={NavitationNEW}
+                      >
+                        BRANCH
+                      </Typography>
+                    )}
                 </>
                 {/* ) : ( */}
                 <>
@@ -284,31 +290,71 @@ const Header = () => {
                     >
                       Header 01
                     </Typography> */}
-                    <Typography
-                      sx={{ ...navbarStyles.signInUpBtn, textAlign: "right" }}
-                      onClick={NavitationRecepies}
-                    >
-                      MENU ITEMS
-                    </Typography>
-                    <Typography
-                      sx={{ ...navbarStyles.signInUpBtn, textAlign: "right" }}
-                      onClick={NavitationMenuSubItem}
-                    >
-                      MENU SUB ITEMS
-                    </Typography>
-            
-                    <Typography
-                      sx={{ ...navbarStyles.signInUpBtn, textAlign: "right" }}
-                      onClick={NavitationMenu}
-                    >
-                      MENU TYPE
-                    </Typography>
-                    <Typography
-                      sx={{ ...navbarStyles.signInUpBtn, textAlign: "right" }}
-                      onClick={NavitationBranch}
-                    >
-                      BRANCH TABLE
-                    </Typography>
+
+                    {authState?.isLoggedIn &&
+                      authState?.user?.roles[0]?.name === "Admin" && (
+                        <Typography
+                          sx={{
+                            ...navbarStyles.signInUpBtn,
+                            textAlign: "right",
+                          }}
+                          onClick={NavitationBranch}
+                        >
+                          BRANCH TABLE
+                        </Typography>
+                      )}
+
+                    {authState?.isLoggedIn &&
+                      authState?.user?.roles[0]?.name === "Admin" && (
+                        <Typography
+                          sx={{
+                            ...navbarStyles.signInUpBtn,
+                            textAlign: "right",
+                          }}
+                          onClick={NavitationRecepies}
+                        >
+                          MENU ITEMS
+                        </Typography>
+                      )}
+                    {authState?.isLoggedIn &&
+                      authState?.user?.roles[0]?.name === "Admin" && (
+                        <Typography
+                          sx={{
+                            ...navbarStyles.signInUpBtn,
+                            textAlign: "right",
+                          }}
+                          onClick={NavitationMenuSubItem}
+                        >
+                          MENU SUB ITEMS
+                        </Typography>
+                      )}
+
+                    {authState?.isLoggedIn &&
+                      authState?.user?.roles[0]?.name === "Admin" && (
+                        <Typography
+                          sx={{
+                            ...navbarStyles.signInUpBtn,
+                            textAlign: "right",
+                          }}
+                          onClick={NavitationMenu}
+                        >
+                          MENU TYPE
+                        </Typography>
+                      )}
+
+                    {authState?.isLoggedIn &&
+                      (authState?.user?.roles[0]?.name === "Admin" ||
+                        authState?.user?.roles[0]?.name === "Staff") && (
+                        <Typography
+                          sx={{
+                            ...navbarStyles.signInUpBtn,
+                            textAlign: "right",
+                          }}
+                          onClick={NavitationReservation}
+                        >
+                          User Reservation
+                        </Typography>
+                      )}
                   </>
                   {/* )} */}
                 </>
@@ -506,7 +552,7 @@ const Header = () => {
                 )}
               </Box>
 
-              <Box sx={{ mb: 2, m: 3 }}>
+              {/* <Box sx={{ mb: 2, m: 3 }}>
                 <TextField
                   variant="filled"
                   label="NIC"
@@ -522,7 +568,7 @@ const Header = () => {
                 {errors["NIC"] && (
                   <Typography color="error">{errors["NIC"]}</Typography>
                 )}
-              </Box>
+              </Box> */}
 
               <Box sx={{ mb: 2, m: 3 }}>
                 <TextField

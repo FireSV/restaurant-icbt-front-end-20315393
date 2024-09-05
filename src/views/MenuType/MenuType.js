@@ -416,7 +416,7 @@ const MenuType = () => {
     <div className="main-container">
       <Header />
       <div className="content">
-        <div style={{ display: "flex" }}>
+        {/* <div style={{ display: "flex" }}>
           <Typography
             variant="h5"
             fontWeight="bold"
@@ -424,7 +424,21 @@ const MenuType = () => {
           >
             Menu Type
           </Typography>
+        </div> */}
+
+        <Box
+          sx={{
+            width: "100%",
+            mt: "3%",
+            padding: "10px",
+          }}
+        ></Box>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Typography variant="h4" fontWeight="bold" sx={{ mb: 2 }}>
+            Menu Type
+          </Typography>
         </div>
+
         <Box
           sx={{
             borderRadius: 4,
@@ -437,10 +451,10 @@ const MenuType = () => {
         >
           <Grid container spacing={2}>
             <Grid item xs={11}>
-              <SearchBar
+              {/* <SearchBar
                 onSearch={handleSearch}
                 placeholderText="Search Menu Type..."
-              />
+              /> */}
             </Grid>
 
             <Grid item xs={1}>

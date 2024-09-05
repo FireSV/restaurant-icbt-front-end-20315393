@@ -97,25 +97,25 @@ const NavBar = () => {
   const handlePopupClose = () => setShowPopup(false);
   const handleRegisterPopupClose = () => setRegiserPopup(false);
 
-  const handleSubmit = async (e) => {    
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     const response = await createUser(inputs);
-console.log("response",response);
+    console.log("response", response);
 
     if (response.success) {
       setLoading(false);
       dispatch(authActions.login(response.data));
       // response?.data?.message &&
-        popAlert("Success!", response?.data.status, 200).then((res) => {
-          setShowPopup(false);
-          setInputs(signIn);
-          setAnchorEl(null);
-        });
+      popAlert("Success!", response?.data.status, 200).then((res) => {
+        setShowPopup(false);
+        setInputs(signIn);
+        setAnchorEl(null);
+      });
     } else {
       // response?.data?.message &&
-        popAlert("Error!", response?.data?.message, "error");
+      popAlert("Error!", response?.data?.message, "error");
       response?.data?.data && setErrors(response.data.data);
     }
     setLoading(false);
@@ -124,28 +124,36 @@ console.log("response",response);
     e.preventDefault();
     setISLoading(true);
 
-    let role = "customer";
+    let role = "User";
 
-    if (RegInputs.role === "donner" || RegInputs.role === "children home") {
-      role = RegInputs.role;
-    }
-
+    // if (RegInputs.role === "donner" || RegInputs.role === "children home") {
+    //   role = RegInputs.role;
+    // }
+    // username;
+    // password;
+    // firstName;
+    // lastName;
+    // contactNo;
+    // address;
+    // mobile;
+    // role;
     const response = await registerUser({
       ...RegInputs,
       role: role,
+      username: RegInputs.email,
     });
 
     if (response.success) {
       response?.data?.message &&
-        popAlert("Success!", response?.data?.message, "success").then((res) => {
+        popAlert("Success!", "success").then((res) => {
           setRegiserPopup(false);
           setRegInputs(register);
           setAnchorEl(null);
         });
     } else {
-      response?.data?.message &&
-        popAlert("Error!", response?.data?.message, "error");
-      response?.data?.data && setErrors(response.data.data);
+      popAlert("Error!", "error").then((res) => {
+        // setErrors(response.data.data);
+      });
     }
     setISLoading(false);
   };
@@ -160,6 +168,10 @@ console.log("response",response);
 
   const NavitationGallery = () => {
     navigate("/gallery");
+  };
+
+  const NavitationDashboard = () => {
+    navigate("/reservation");
   };
 
   useEffect(() => {
@@ -216,18 +228,30 @@ console.log("response",response);
                 >
                   HOME
                 </Typography>
-                <Typography
-                  sx={{ ...navbarStyles.signInUpBtn, textAlign: "right" }}
-                  onClick={NavitationGallery}
-                >
-                  GALLERY
-                </Typography>
+                {authState?.isLoggedIn &&
+                  authState?.user?.roles[0]?.name === "User" && (
+                    <Typography
+                      sx={{ ...navbarStyles.signInUpBtn, textAlign: "right" }}
+                      onClick={NavitationGallery}
+                    >
+                      GALLERY
+                    </Typography>
+                  )}
+                {authState?.isLoggedIn &&
+                  authState?.user?.roles[0]?.name !== "User" && (
+                    <Typography
+                      sx={{ ...navbarStyles.signInUpBtn, textAlign: "right" }}
+                      onClick={NavitationDashboard}
+                    >
+                      DASHBOARD
+                    </Typography>
+                  )}
               </>
               {/* ) : ( */}
               <>
                 {authState?.isLoggedIn && (
                   <>
-                    <Typography
+                    {/* <Typography
                       sx={{ ...navbarStyles.signInUpBtn, textAlign: "right" }}
                       onClick={NavitationHOME}
                     >
@@ -244,7 +268,7 @@ console.log("response",response);
                       onClick={NavitationNEW}
                     >
                       Header 01
-                    </Typography>
+                    </Typography> */}
                   </>
                 )}
               </>
@@ -432,7 +456,7 @@ console.log("response",response);
               )}
             </Box>
 
-            <Box sx={{ mb: 2, m: 3 }}>
+            {/* <Box sx={{ mb: 2, m: 3 }}>
               <TextField
                 variant="filled"
                 label="NIC"
@@ -448,7 +472,7 @@ console.log("response",response);
               {errors["NIC"] && (
                 <Typography color="error">{errors["NIC"]}</Typography>
               )}
-            </Box>
+            </Box> */}
 
             <Box sx={{ mb: 2, m: 3 }}>
               <TextField
@@ -506,7 +530,7 @@ console.log("response",response);
               )}
             </Box>
 
-            <Box sx={{ mb: 2, m: 3 }}>
+            {/* <Box sx={{ mb: 2, m: 3 }}>
               <Select
                 label="I am"
                 value={RegInputs.role}
@@ -524,7 +548,7 @@ console.log("response",response);
               {errors["role"] && (
                 <Typography color="error">{errors["role"]}</Typography>
               )}
-            </Box>
+            </Box> */}
 
             <Box sx={{ mb: 2, m: 3 }}>
               <TextField
